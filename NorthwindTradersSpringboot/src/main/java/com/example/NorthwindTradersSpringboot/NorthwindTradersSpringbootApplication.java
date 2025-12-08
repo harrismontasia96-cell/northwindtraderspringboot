@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class NorthwindTradersSpringbootApplication implements CommandLineRunner {
 
     @Autowired
-    private ProductDao productDao;   // Dependency Injection
+    private ProductDao productDao;
 
     public static void main(String[] args) {
         SpringApplication.run(NorthwindTradersSpringbootApplication.class, args);
