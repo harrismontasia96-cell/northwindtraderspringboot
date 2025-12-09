@@ -1,5 +1,8 @@
 package com.northwindtraders;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+
 import com.northwindtraders.dao.ProductDao;
 import com.northwindtraders.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NorthwindApplication implements CommandLineRunner {
+
+
+    @Autowired
+    private DataSource dataSource;
 
     @Autowired
     private ProductDao productDao;
