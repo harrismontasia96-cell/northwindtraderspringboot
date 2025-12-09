@@ -1,8 +1,8 @@
+
 package com.northwindtraders.dao;
 
 import com.northwindtraders.models.Product;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +12,12 @@ public class SimpleProductDao implements ProductDao {
     private List<Product> products = new ArrayList<>();
 
     public SimpleProductDao() {
-        // preload example products in memory
-        products.add(new Product(1, "Laptop", "Electronics", 999.99));
-        products.add(new Product(2, "Desk Lamp", "Home", 29.99));
-        products.add(new Product(3, "Notebook", "Office", 3.49));
+        products.add(new Product(3, "Book", "Education", 19.99));
+        products.add(new Product(4, "Pen", "Stationery", 2.99));
     }
 
     @Override
-    public List<Product> getAll() {
+    public List<Product> getAllProducts() {
         return products;
     }
 

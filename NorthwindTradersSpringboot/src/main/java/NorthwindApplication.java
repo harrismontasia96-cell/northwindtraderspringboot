@@ -18,7 +18,7 @@ public class NorthwindApplication implements CommandLineRunner {
         System.out.println("=== Northwind Traders CLI ===");
 
         System.out.println("Products in database:");
-        productDao.getAll().forEach(product -> {
+        productDao.getAllProducts().forEach(product -> {
             System.out.println(product.getProductId() + " - " + product.getProductName());
         });
     }

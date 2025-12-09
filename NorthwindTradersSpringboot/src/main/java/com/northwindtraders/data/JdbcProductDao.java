@@ -1,70 +1,55 @@
-package com.northwindtraders.data;
+package com.northwindtraders.dao;
 
-import com.northwindtraders.dao.ProductDao;
 import com.northwindtraders.models.Product;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
+@Primary
 public class JdbcProductDao implements ProductDao {
 
-    private final JdbcTemplate jdbc;
+    private List<Product> products = new ArrayList<>();
 
-    @Autowired
-    public JdbcProductDao(JdbcTemplate jdbcTemplate) {
-        this.jdbc = jdbcTemplate;
+    public JdbcProductDao() {
+        // preload example products
+        products.add(new Product(1, "Laptop", "Electronics", 999.99));
+        products.add(new Product(2, "Phone", "Electronics", 599.99));
     }
 
-    private RowMapper<Product> productMapper = (rs, rowNum) -> {
-        Product p = new Product();
-        p.setProductId(rs.getInt("ProductID"));
-        p.setProductName(rs.getString("ProductName"));
-        p.setCategory(rs.getString("Category"));
-        p.setPrice(rs.getDouble("Price"));
-        return p;
-    };
-
     @Override
-    public List<Product> getAll() {
-        String sql = "SELECT ProductID, ProductName, Category, Price FROM Products";
-        return jdbc.query(sql, productMapper);
+    public List<Product> getAllProducts() {
+        return products;
     }
 
     @Override
     public Product getById(int id) {
-        String sql = "SELECT ProductID, ProductName, Category, Price FROM Products WHERE ProductID = ?";
-        return jdbc.queryForObject(sql, productMapper, id);
+        return products.stream()
+                .filter(p -> p.getProductId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public void add(Product product) {
-        String sql = "INSERT INTO Products (ProductName, Category, Price) VALUES (?, ?, ?)";
-        jdbc.update(sql,
-                product.getProductName(),
-                product.getCategory(),
-                product.getPrice()
-        );
+        products.add(product);
     }
 
     @Override
     public void update(Product product) {
-        String sql = "UPDATE Products SET ProductName = ?, Category = ?, Price = ? WHERE ProductID = ?";
-        jdbc.update(sql,
-                product.getProductName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getProductId()
-        );
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getProductId() == product.getProductId()) {
+                products.set(i, product);
+                return;
+            }
+        }
     }
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM Products WHERE ProductID = ?";
-        jdbc.update(sql, id);
+        products.removeIf(p -> p.getProductId() == id);
     }
 }
 
